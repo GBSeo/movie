@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>당신을 위한 영화관</title>
+    <style type="text/css">
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('cinema.jpeg'); /* 영화관 이미지 경로 */
+            background-size: cover;}
+
+        #filter-buttons button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            border: 2px solid #333;
+            background-color: #fff;
+            cursor: pointer;}
+
+        #filter-buttons {
+            position:absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;}
+
+        #webcam {
+            position: absolute;
+            top: 400px; /* 스크린 위치 조정 */
+            left: 50%;
+            transform: translate(-50%, -50%)scaleX(-1);
+            width: 40%; /* 스크린 크기 조정 */}
+
+
+        #floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;}
+
+        .floating-btn {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 50%;
+            cursor: pointer;}
+
+        #gif-display {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;}
+
+
+
+    </style>
+</head>
+
+<body>
+    <div id="filter-buttons" style="text-align:center; position: relative; top: 50px;">
+        <button onclick="applyFilter('none')">필터 없음</button>
+        <button onclick="applyFilter('grayscale(100%)')">흑백</button>
+        <button onclick="applyFilter('grayscale(50%) contrast(150%) sepia(20%)')">레트로</button>
+        <button onclick="applyFilter('blur(5px)')">블러</button>
+        <button onclick="applyFilter('brightness(200%)')">밝기</button>
+        <button onclick="applyFilter('contrast(200%)')">대비</button>
+        <button onclick="applyFilter('hue-rotate(90deg)')">색상 회전</button>
+    </div>
+
+
+    <div id="cinema">
+        <video id="webcam" autoplay></video>
+    </div>
+
+    <div id="floating-buttons">
+      <button class="floating-btn" onclick="showGif('gif1')">버튼1</button>
+      <button class="floating-btn" onclick="showGif('gif2')">버튼2</button>
+      <button class="floating-btn" onclick="showGif('gif3')">버튼3</button>
+  </div>
+
+    <div id="gif-display"></div>
+
+
+    <script type="text/javascript">
+        function applyFilter(filter) {
+            document.getElementById('webcam').style.filter = filter;}
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('webcam');
+                video.srcObject = stream;
+        })
+        .catch(function(error) {
+            console.log("Something went wrong!");
+        });
+
+
+        function showGif(gifId) {
+  var gifElement = document.getElementById('gif-display');
+  gifElement.innerHTML = '<img src="' + gifId + '.gif" alt="움짤" />'; // 움짤 이미지 경로를 설정해주세요.
+  gifElement.style.display = 'block';
+
+  setTimeout(function() {
+    gifElement.style.display = 'none';
+  }, 3000); // 3초 후에 움짤을 숨깁니다.
+}
+ 
+    </script>
+
+</body>
+</html>
